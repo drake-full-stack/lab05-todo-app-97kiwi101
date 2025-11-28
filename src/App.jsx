@@ -7,7 +7,7 @@ function App() {
     { text: "Project one", completed: false },
     { text: "sleep", completed: false },
     { text: "heard the cats", completed: false },
-    "clean room",
+    { text: "clean room", completed: false }, // Fixed this line
   ]);
   const [inputValue, setInputValue] = useState("");
 
@@ -20,6 +20,21 @@ function App() {
     }
     setInputValue("");
   };
+
+  const handleToggle = (indexToToggle) => {
+    setTasks(
+      tasks.map((task, index) => {
+        // If this is the task the user clicked:
+        if (index === indexToToggle) {
+          // Create a copy of the task (...task) and flip the 'completed' status
+          return { ...task, completed: !task.completed };
+        }
+        // If this isn't the task, leave it alone
+        return task;
+      })
+    );
+  };
+
   const handleDelete = (indexToDelete) => {
     setTasks(tasks.filter((_, index) => index !== indexToDelete));
   };
@@ -44,14 +59,20 @@ function App() {
       <ul className="task-list">
         {tasks.map((task, index) => (
           <li key={index} className="task-item">
-            <span className="task-text">{task.text}</span>
-            <button
-              className="delete-button"
-              onClick={() => handleDelete(index)}
-            >
-              🗑️
-            </button>
-          </li>
+            <input
+            type="checkbox"
+            checked={task.completed}
+            onChange={() => handleToggle(index)}
+          />
+          <span className="task-text">{task.text}</span>
+          <button
+          className="delete-button"
+          onClick={() => handleDelete(index)}
+          >
+            🗑️
+          </button>
+        </li>
+
         ))}
       </ul>
     </div>
